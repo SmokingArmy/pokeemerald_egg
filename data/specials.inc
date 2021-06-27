@@ -535,4 +535,9 @@ gSpecials:: @ 81DBA64
 	def_special RemoveRecordsWindow
 	def_special CloseDeptStoreElevatorWindow
 	def_special TrySetBattleTowerLinkType
+<<<<<<< HEAD
 	def_special SetTotemBoost
+=======
+    def_special NameRival
+
+>>>>>>> 43dd3e38df40a0a84d98b036db27d30d90bec5a8

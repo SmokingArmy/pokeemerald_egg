@@ -3182,7 +3182,48 @@ u32 BattleStringExpandPlaceholders(const u8 *src, u8 *dst)
                 toCpy = BattleStringGetOpponentClassByTrainerId(gTrainerBattleOpponent_A);
                 break;
             case B_TXT_TRAINER1_NAME: // trainer1 name
+<<<<<<< HEAD
                 toCpy = BattleStringGetOpponentNameByTrainerId(gTrainerBattleOpponent_A, text, multiplayerId, GetBattlerAtPosition(B_POSITION_OPPONENT_LEFT));
+=======
+                if (gBattleTypeFlags & BATTLE_TYPE_SECRET_BASE)
+                {
+                    for (i = 0; i < (s32) ARRAY_COUNT(gBattleResources->secretBase->trainerName); i++)
+                        text[i] = gBattleResources->secretBase->trainerName[i];
+                    text[i] = EOS;
+                    ConvertInternationalString(text, gBattleResources->secretBase->language);
+                    toCpy = text;
+                }
+                else if (gTrainerBattleOpponent_A == TRAINER_UNION_ROOM)
+                {
+                    toCpy = gLinkPlayers[multiplayerId ^ BIT_SIDE].name;
+                }
+                else if (gTrainerBattleOpponent_A == TRAINER_FRONTIER_BRAIN)
+                {
+                    CopyFrontierBrainTrainerName(text);
+                    toCpy = text;
+                }
+                else if (gBattleTypeFlags & BATTLE_TYPE_FRONTIER)
+                {
+                    GetFrontierTrainerName(text, gTrainerBattleOpponent_A);
+                    toCpy = text;
+                }
+                else if (gBattleTypeFlags & BATTLE_TYPE_TRAINER_HILL)
+                {
+                    GetTrainerHillTrainerName(text, gTrainerBattleOpponent_A);
+                    toCpy = text;
+                }
+                else if (gBattleTypeFlags & BATTLE_TYPE_EREADER_TRAINER)
+                {
+                    GetEreaderTrainerName(text);
+                    toCpy = text;
+                }
+                else
+                {
+                    toCpy = gTrainers[gTrainerBattleOpponent_A].trainerName;
+                    if (toCpy[0] == B_BUFF_PLACEHOLDER_BEGIN && toCpy[1] == B_TXT_RIVAL_NAME)
+                        toCpy = GetExpandedPlaceholder(PLACEHOLDER_ID_RIVAL);
+                }
+>>>>>>> 43dd3e38df40a0a84d98b036db27d30d90bec5a8
                 break;
             case B_TXT_LINK_PLAYER_NAME: // link player name
                 toCpy = gLinkPlayers[multiplayerId].name;
@@ -3378,6 +3419,9 @@ u32 BattleStringExpandPlaceholders(const u8 *src, u8 *dst)
                     toCpy = sText_Your2;
                 else
                     toCpy = sText_Opposing2;
+                break;
+            case B_TXT_RIVAL_NAME:
+                toCpy = gSaveBlock2Ptr->rivalName;
                 break;
             }
 
