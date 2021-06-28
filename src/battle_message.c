@@ -3182,9 +3182,7 @@ u32 BattleStringExpandPlaceholders(const u8 *src, u8 *dst)
                 toCpy = BattleStringGetOpponentClassByTrainerId(gTrainerBattleOpponent_A);
                 break;
             case B_TXT_TRAINER1_NAME: // trainer1 name
-<<<<<<< HEAD
                 toCpy = BattleStringGetOpponentNameByTrainerId(gTrainerBattleOpponent_A, text, multiplayerId, GetBattlerAtPosition(B_POSITION_OPPONENT_LEFT));
-=======
                 if (gBattleTypeFlags & BATTLE_TYPE_SECRET_BASE)
                 {
                     for (i = 0; i < (s32) ARRAY_COUNT(gBattleResources->secretBase->trainerName); i++)
@@ -3223,7 +3221,6 @@ u32 BattleStringExpandPlaceholders(const u8 *src, u8 *dst)
                     if (toCpy[0] == B_BUFF_PLACEHOLDER_BEGIN && toCpy[1] == B_TXT_RIVAL_NAME)
                         toCpy = GetExpandedPlaceholder(PLACEHOLDER_ID_RIVAL);
                 }
->>>>>>> 43dd3e38df40a0a84d98b036db27d30d90bec5a8
                 break;
             case B_TXT_LINK_PLAYER_NAME: // link player name
                 toCpy = gLinkPlayers[multiplayerId].name;

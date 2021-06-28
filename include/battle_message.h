@@ -57,7 +57,6 @@
 #define B_TXT_PARTNER_CLASS 0x32
 #define B_TXT_PARTNER_NAME 0x33
 #define B_TXT_BUFF3 0x34
-<<<<<<< HEAD
 #define B_TXT_ATK_TRAINER_NAME 0x35
 #define B_TXT_ATK_TRAINER_CLASS 0x36
 #define B_TXT_ATK_TEAM1 0x37 // Your/The opposing
@@ -67,9 +66,7 @@
 #define B_TXT_DEF_TEAM2 0x3B // your/the opposing
 #define B_TXT_ACTIVE_NAME 0x3C
 #define B_TXT_ACTIVE_NAME2 0x3D // no Illusion check
-=======
-#define B_TXT_RIVAL_NAME 0x35
->>>>>>> 43dd3e38df40a0a84d98b036db27d30d90bec5a8
+#define B_TXT_RIVAL_NAME 0x3E
 
 // for B_TXT_BUFF1, B_TXT_BUFF2 and B_TXT_BUFF3
 

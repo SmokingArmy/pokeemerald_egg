@@ -509,12 +509,9 @@ struct SaveBlock2
     /*0x57C*/ struct RankingHall2P hallRecords2P[2][3]; // From record mixing.
     /*0x624*/ u16 contestLinkResults[CONTEST_CATEGORIES_COUNT][CONTESTANT_COUNT];
     /*0x64C*/ struct BattleFrontier frontier;
-<<<<<<< HEAD
 	/*0xF2C*/ bool8 autoRun;
     /*0xF2C*/ u8 itemFlags[ITEM_FLAGS_COUNT];
-=======
     /*0xF2C*/ u8 rivalName[PLAYER_NAME_LENGTH + 1];
->>>>>>> 43dd3e38df40a0a84d98b036db27d30d90bec5a8
 }; // sizeof=0xF2C
 
 extern struct SaveBlock2 *gSaveBlock2Ptr;
