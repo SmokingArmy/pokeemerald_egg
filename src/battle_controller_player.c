@@ -496,6 +496,19 @@ static void HandleInputChooseTarget(void)
     }
 }
 
+static void HideAllTargets(void)
+{
+    s32 i;
+    for (i = 0; i < MAX_BATTLERS_COUNT; i++)
+    {
+        if (IsBattlerAlive(i) && gBattleSpritesDataPtr->healthBoxesData[i].healthboxIsBouncing)
+        {
+            gSprites[gBattlerSpriteIds[i]].callback = SpriteCb_HideAsMoveTarget;
+            EndBounceEffect(i, BOUNCE_HEALTHBOX);
+        }
+    }
+}
+
 static void HideShownTargets(void)
 {
     s32 i;
@@ -506,6 +519,34 @@ static void HideShownTargets(void)
             gSprites[gBattlerSpriteIds[i]].callback = SpriteCb_HideAsMoveTarget;
             EndBounceEffect(i, BOUNCE_HEALTHBOX);
         }
+    }
+}
+
+static void HandleInputShowEntireFieldTargets(void)
+{
+    if (JOY_HELD(DPAD_ANY) && gSaveBlock2Ptr->optionsButtonMode == OPTIONS_BUTTON_MODE_L_EQUALS_A)
+        gPlayerDpadHoldFrames++;
+    else
+        gPlayerDpadHoldFrames = 0;
+
+    if (JOY_NEW(A_BUTTON))
+    {
+        PlaySE(SE_SELECT);
+        HideAllTargets();
+        if (gBattleStruct->mega.playerSelect)
+            BtlController_EmitTwoReturnValues(1, 10, gMoveSelectionCursor[gActiveBattler] | RET_MEGA_EVOLUTION | (gMultiUsePlayerCursor << 8));
+        else
+            BtlController_EmitTwoReturnValues(1, 10, gMoveSelectionCursor[gActiveBattler] | (gMultiUsePlayerCursor << 8));
+        HideMegaTriggerSprite();
+        PlayerBufferExecCompleted();
+    }
+    else if (gMain.newKeys & B_BUTTON || gPlayerDpadHoldFrames > 59)
+    {
+        PlaySE(SE_SELECT);
+        HideAllTargets();
+        gBattlerControllerFuncs[gActiveBattler] = HandleInputChooseMove;
+        DoBounceEffect(gActiveBattler, BOUNCE_HEALTHBOX, 7, 1);
+        DoBounceEffect(gActiveBattler, BOUNCE_MON, 7, 1);
     }
 }
 
@@ -549,7 +590,7 @@ static void TryShowAsTarget(u32 battlerId)
 
 static void HandleInputChooseMove(void)
 {
-    u8 moveTarget;
+    u16 moveTarget;
     u32 canSelectTarget = 0;
     struct ChooseMoveStruct *moveInfo = (struct ChooseMoveStruct*)(&gBattleResources->bufferA[gActiveBattler][4]);
 
@@ -601,18 +642,31 @@ static void HandleInputChooseMove(void)
             }
 
             // Show all available targets for multi-target moves
-            if (B_SHOW_TARGETS && moveTarget & (MOVE_TARGET_OPPONENTS_FIELD | MOVE_TARGET_BOTH | MOVE_TARGET_FOES_AND_ALLY))
+            if (B_SHOW_TARGETS)
             {
-                TryShowAsTarget(gMultiUsePlayerCursor);
-                TryShowAsTarget(BATTLE_PARTNER(gMultiUsePlayerCursor));
-                if (moveTarget & MOVE_TARGET_FOES_AND_ALLY)
-                    TryShowAsTarget(BATTLE_PARTNER(gActiveBattler));
-                canSelectTarget = 2;
+                if ((moveTarget & MOVE_TARGET_ALL_BATTLERS) == MOVE_TARGET_ALL_BATTLERS)
+                {
+                    u32 i = 0;
+                    for (i = 0; i < gBattlersCount; i++)
+                        TryShowAsTarget(i);
+                    
+                    canSelectTarget = 3;
+                }
+                else if (moveTarget & (MOVE_TARGET_OPPONENTS_FIELD | MOVE_TARGET_BOTH | MOVE_TARGET_FOES_AND_ALLY))
+                {
+                    TryShowAsTarget(gMultiUsePlayerCursor);
+                    TryShowAsTarget(BATTLE_PARTNER(gMultiUsePlayerCursor));
+                    if (moveTarget & MOVE_TARGET_FOES_AND_ALLY)
+                        TryShowAsTarget(BATTLE_PARTNER(gActiveBattler));
+                    canSelectTarget = 2;
+                }
             }
         }
-
-        if (canSelectTarget == 0)
+        
+        switch (canSelectTarget)
         {
+        case 0:
+        default:
             if (gBattleStruct->mega.playerSelect)
                 BtlController_EmitTwoReturnValues(1, 10, gMoveSelectionCursor[gActiveBattler] | RET_MEGA_EVOLUTION | (gMultiUsePlayerCursor << 8));
             else
@@ -620,9 +674,8 @@ static void HandleInputChooseMove(void)
             HideMegaTriggerSprite();
             TryHideLastUsedBall();
             PlayerBufferExecCompleted();
-        }
-        else if (canSelectTarget == 1)
-        {
+            break;
+        case 1:
             gBattlerControllerFuncs[gActiveBattler] = HandleInputChooseTarget;
 
             if (moveTarget & (MOVE_TARGET_USER | MOVE_TARGET_USER_OR_SELECTED))
@@ -633,10 +686,13 @@ static void HandleInputChooseMove(void)
                 gMultiUsePlayerCursor = GetBattlerAtPosition(B_POSITION_OPPONENT_LEFT);
 
             gSprites[gBattlerSpriteIds[gMultiUsePlayerCursor]].callback = SpriteCb_ShowAsMoveTarget;
-        }
-        else
-        {
+            break;
+        case 2:
             gBattlerControllerFuncs[gActiveBattler] = HandleInputShowTargets;
+            break;
+        case 3: // Entire field
+            gBattlerControllerFuncs[gActiveBattler] = HandleInputShowEntireFieldTargets;
+            break;
         }
     }
     else if (JOY_NEW(B_BUTTON) || gPlayerDpadHoldFrames > 59)
@@ -1047,20 +1103,25 @@ static void Intro_DelayAndEnd(void)
     }
 }
 
+static bool32 TwoIntroMons(u32 battlerId) // Double battle with both player pokemon active.
+{
+    return (IsDoubleBattle() && IsValidForBattle(&gPlayerParty[gBattlerPartyIndexes[battlerId ^ BIT_FLANK]]));
+}
+
 static void Intro_WaitForShinyAnimAndHealthbox(void)
 {
     bool8 healthboxAnimDone = FALSE;
 
     // Check if healthbox has finished sliding in
-    if (!IsDoubleBattle() || (IsDoubleBattle() && (gBattleTypeFlags & BATTLE_TYPE_MULTI)))
+    if (TwoIntroMons(gActiveBattler) && !(gBattleTypeFlags & BATTLE_TYPE_MULTI))
     {
-        if (gSprites[gHealthboxSpriteIds[gActiveBattler]].callback == SpriteCallbackDummy)
+        if (gSprites[gHealthboxSpriteIds[gActiveBattler]].callback == SpriteCallbackDummy
+         && gSprites[gHealthboxSpriteIds[gActiveBattler ^ BIT_FLANK]].callback == SpriteCallbackDummy)
             healthboxAnimDone = TRUE;
     }
     else
     {
-        if (gSprites[gHealthboxSpriteIds[gActiveBattler]].callback == SpriteCallbackDummy
-         && gSprites[gHealthboxSpriteIds[gActiveBattler ^ BIT_FLANK]].callback == SpriteCallbackDummy)
+        if (gSprites[gHealthboxSpriteIds[gActiveBattler]].callback == SpriteCallbackDummy)
             healthboxAnimDone = TRUE;
     }
 
@@ -1078,7 +1139,7 @@ static void Intro_WaitForShinyAnimAndHealthbox(void)
 
         HandleLowHpMusicChange(&gPlayerParty[gBattlerPartyIndexes[gActiveBattler]], gActiveBattler);
 
-        if (IsDoubleBattle())
+        if (TwoIntroMons(gActiveBattler))
             HandleLowHpMusicChange(&gPlayerParty[gBattlerPartyIndexes[gActiveBattler ^ BIT_FLANK]], gActiveBattler ^ BIT_FLANK);
 
         gBattleSpritesDataPtr->healthBoxesData[gActiveBattler].introEndDelay = 3;
@@ -1107,7 +1168,7 @@ static void Intro_TryShinyAnimShowHealthbox(void)
     {
         if (!gBattleSpritesDataPtr->healthBoxesData[gActiveBattler].healthboxSlideInStarted)
         {
-            if (IsDoubleBattle() && !(gBattleTypeFlags & BATTLE_TYPE_MULTI))
+            if (TwoIntroMons(gActiveBattler) && !(gBattleTypeFlags & BATTLE_TYPE_MULTI))
             {
                 UpdateHealthboxAttribute(gHealthboxSpriteIds[gActiveBattler ^ BIT_FLANK], &gPlayerParty[gBattlerPartyIndexes[gActiveBattler ^ BIT_FLANK]], HEALTHBOX_ALL);
                 StartHealthboxSlideIn(gActiveBattler ^ BIT_FLANK);
@@ -1138,15 +1199,7 @@ static void Intro_TryShinyAnimShowHealthbox(void)
     }
 
     // Wait for battler anims
-    if (!IsDoubleBattle() || (IsDoubleBattle() && (gBattleTypeFlags & BATTLE_TYPE_MULTI)))
-    {
-        if (gSprites[gBattleControllerData[gActiveBattler]].callback == SpriteCallbackDummy
-            && gSprites[gBattlerSpriteIds[gActiveBattler]].callback == SpriteCallbackDummy)
-        {
-            battlerAnimsDone = TRUE;
-        }
-    }
-    else
+    if (TwoIntroMons(gActiveBattler) && !(gBattleTypeFlags & BATTLE_TYPE_MULTI))
     {
         if (gSprites[gBattleControllerData[gActiveBattler]].callback == SpriteCallbackDummy
             && gSprites[gBattlerSpriteIds[gActiveBattler]].callback == SpriteCallbackDummy
@@ -1156,11 +1209,19 @@ static void Intro_TryShinyAnimShowHealthbox(void)
             battlerAnimsDone = TRUE;
         }
     }
+    else
+    {
+        if (gSprites[gBattleControllerData[gActiveBattler]].callback == SpriteCallbackDummy
+            && gSprites[gBattlerSpriteIds[gActiveBattler]].callback == SpriteCallbackDummy)
+        {
+            battlerAnimsDone = TRUE;
+        }
+    }
 
     // Clean up
     if (bgmRestored && battlerAnimsDone)
     {
-        if (IsDoubleBattle() && !(gBattleTypeFlags & BATTLE_TYPE_MULTI))
+        if (TwoIntroMons(gActiveBattler) && !(gBattleTypeFlags & BATTLE_TYPE_MULTI))
             DestroySprite(&gSprites[gBattleControllerData[gActiveBattler ^ BIT_FLANK]]);
         DestroySprite(&gSprites[gBattleControllerData[gActiveBattler]]);
 
@@ -3128,12 +3189,7 @@ static void Task_StartSendOutAnim(u8 taskId)
         u8 savedActiveBattler = gActiveBattler;
 
         gActiveBattler = gTasks[taskId].tBattlerId;
-        if (!IsDoubleBattle() || (gBattleTypeFlags & BATTLE_TYPE_MULTI))
-        {
-            gBattleResources->bufferA[gActiveBattler][1] = gBattlerPartyIndexes[gActiveBattler];
-            StartSendOutAnim(gActiveBattler, FALSE);
-        }
-        else
+        if (TwoIntroMons(gActiveBattler) && !(gBattleTypeFlags & BATTLE_TYPE_MULTI))
         {
             gBattleResources->bufferA[gActiveBattler][1] = gBattlerPartyIndexes[gActiveBattler];
             StartSendOutAnim(gActiveBattler, FALSE);
@@ -3142,6 +3198,11 @@ static void Task_StartSendOutAnim(u8 taskId)
             BattleLoadPlayerMonSpriteGfx(&gPlayerParty[gBattlerPartyIndexes[gActiveBattler]], gActiveBattler);
             StartSendOutAnim(gActiveBattler, FALSE);
             gActiveBattler ^= BIT_FLANK;
+        }
+        else
+        {
+            gBattleResources->bufferA[gActiveBattler][1] = gBattlerPartyIndexes[gActiveBattler];
+            StartSendOutAnim(gActiveBattler, FALSE);
         }
         gBattlerControllerFuncs[gActiveBattler] = Intro_TryShinyAnimShowHealthbox;
         gActiveBattler = savedActiveBattler;

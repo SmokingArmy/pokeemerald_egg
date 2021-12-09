@@ -2363,6 +2363,7 @@ const struct Item gItems[] =
 
     [ITEM_PAYAPA_BERRY] =
     {
+<<<<<<< HEAD
         .name = _("Payapa Berry"),
         .itemId = ITEM_PAYAPA_BERRY,
         .price = 20,
@@ -2370,6 +2371,14 @@ const struct Item gItems[] =
         .holdEffectParam = TYPE_PSYCHIC,
         .description = sPayapaBerryDesc,
         .pocket = POCKET_BERRIES,
+=======
+        .name = _("MENTAL HERB"),
+        .itemId = ITEM_MENTAL_HERB,
+        .price = 100,
+        .holdEffect = HOLD_EFFECT_MENTAL_HERB,
+        .description = sMentalHerbDesc,
+        .pocket = POCKET_ITEMS,
+>>>>>>> dff72b97dd04595cc16bbae9037da276eee9d8b6
         .type = ITEM_USE_BAG_MENU,
         .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
     },
@@ -3161,8 +3170,13 @@ const struct Item gItems[] =
     {
         .name = _("Upgrade"),
         .itemId = ITEM_UP_GRADE,
+<<<<<<< HEAD
         .price = 2000,
         .holdEffect = HOLD_EFFECT_UP_GRADE,
+=======
+        .price = 2100,
+        .holdEffect = HOLD_EFFECT_UPGRADE,
+>>>>>>> dff72b97dd04595cc16bbae9037da276eee9d8b6
         .description = sUpGradeDesc,
         .pocket = POCKET_ITEMS,
         .type = ITEM_USE_BAG_MENU,
@@ -3254,12 +3268,20 @@ const struct Item gItems[] =
 
     [ITEM_POWER_WEIGHT] =
     {
+<<<<<<< HEAD
         .name = _("Power Weight"),
         .itemId = ITEM_POWER_WEIGHT,
         .price = 3000,
         .holdEffect = HOLD_EFFECT_POWER_ITEM,
         .holdEffectParam = 8,
         .description = sPowerWeightDesc,
+=======
+        .name = _("STICK"),
+        .itemId = ITEM_STICK,
+        .price = 200,
+        .holdEffect = HOLD_EFFECT_LEEK,
+        .description = sStickDesc,
+>>>>>>> dff72b97dd04595cc16bbae9037da276eee9d8b6
         .pocket = POCKET_ITEMS,
         .type = ITEM_USE_BAG_MENU,
         .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
