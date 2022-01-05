@@ -38,9 +38,9 @@ enum
 
 static const struct PartyMenuBoxInfoRects sPartyBoxInfoRects[] =
 {
-    [PARTY_BOX_LEFT_COLUMN] = 
+    [PARTY_BOX_LEFT_COLUMN] =
     {
-        BlitBitmapToPartyWindow_LeftColumn, 
+        BlitBitmapToPartyWindow_LeftColumn,
         {
             //The below are the x, y, width, and height for each of the following info
             24, 11, 40, 13, // Nickname
@@ -49,12 +49,12 @@ static const struct PartyMenuBoxInfoRects sPartyBoxInfoRects[] =
             38, 37, 24,  8, // HP
             53, 37, 24,  8, // Max HP
             24, 35, 48,  3  // HP bar
-        }, 
+        },
         12, 34, 64, 16      // Description text (e.g. NO USE)
     },
-    [PARTY_BOX_RIGHT_COLUMN] = 
+    [PARTY_BOX_RIGHT_COLUMN] =
     {
-        BlitBitmapToPartyWindow_RightColumn, 
+        BlitBitmapToPartyWindow_RightColumn,
         {
              // See above comment
              22,  3, 40, 13, // Nickname
@@ -63,7 +63,7 @@ static const struct PartyMenuBoxInfoRects sPartyBoxInfoRects[] =
             102, 12, 24,  8, // HP
             117, 12, 24,  8, // Max HP
              88, 10, 48,  3  // HP bar
-        }, 
+        },
         77, 4, 64, 16        // Description text
     },
     [PARTY_BOX_EQUAL_COLUMN] = //Custom party menu
@@ -88,7 +88,7 @@ static const struct PartyMenuBoxInfoRects sPartyBoxInfoRects[] =
 // Pokemon icon (x, y), held item (x, y), status condition (x, y), menu pokeball (x, y)
 static const u8 sPartyMenuSpriteCoords[PARTY_LAYOUT_COUNT][PARTY_SIZE][4 * 2] =
 {
-    [PARTY_LAYOUT_SINGLE] = 
+    [PARTY_LAYOUT_SINGLE] =
     {
         { 24,  14,  38,  33, 104,  31,  24,  18},
         {136,  22, 150,  41, 216,  39, 136,  26},
@@ -97,7 +97,7 @@ static const u8 sPartyMenuSpriteCoords[PARTY_LAYOUT_COUNT][PARTY_SIZE][4 * 2] =
         { 24,  94,  38, 113, 104, 111,  24,  98},
         {136, 102, 150, 121, 216, 119, 136, 106},
     },
-    [PARTY_LAYOUT_DOUBLE] = 
+    [PARTY_LAYOUT_DOUBLE] =
     {
         {16, 24, 20, 34, 50, 36, 16, 18},
         {16, 80, 20, 90, 50, 92, 16, 74},
@@ -106,7 +106,7 @@ static const u8 sPartyMenuSpriteCoords[PARTY_LAYOUT_COUNT][PARTY_SIZE][4 * 2] =
         {104, 82, 108, 92, 136, 91, 102, 89},
         {104, 114, 108, 124, 136, 123, 102, 121},
     },
-    [PARTY_LAYOUT_MULTI] = 
+    [PARTY_LAYOUT_MULTI] =
     {
         {16, 24, 20, 34, 50, 36, 16, 18},
         {16, 80, 20, 90, 50, 92, 16, 74},
@@ -115,7 +115,7 @@ static const u8 sPartyMenuSpriteCoords[PARTY_LAYOUT_COUNT][PARTY_SIZE][4 * 2] =
         {104, 82, 106, 92, 136, 91, 102, 89},
         {104, 106, 106, 116, 136, 115, 102, 113},
     },
-    [PARTY_LAYOUT_MULTI_SHOWCASE] = 
+    [PARTY_LAYOUT_MULTI_SHOWCASE] =
     {
         {16, 32, 20, 42, 50, 44, 16, 26},
         {104, 34, 106, 44, 136, 43, 102, 41},
@@ -1355,6 +1355,56 @@ static const u16 sTMHMMoves[] =
     [ITEM_TM48 - ITEM_TM01] = MOVE_SKILL_SWAP,
     [ITEM_TM49 - ITEM_TM01] = MOVE_SNATCH,
     [ITEM_TM50 - ITEM_TM01] = MOVE_OVERHEAT,
+    [ITEM_TM51 - ITEM_TM01] = MOVE_NONE, // Todo
+    [ITEM_TM52 - ITEM_TM01] = MOVE_NONE, // Todo
+    [ITEM_TM53 - ITEM_TM01] = MOVE_NONE, // Todo
+    [ITEM_TM54 - ITEM_TM01] = MOVE_NONE, // Todo
+    [ITEM_TM55 - ITEM_TM01] = MOVE_NONE, // Todo
+    [ITEM_TM56 - ITEM_TM01] = MOVE_NONE, // Todo
+    [ITEM_TM57 - ITEM_TM01] = MOVE_NONE, // Todo
+    [ITEM_TM58 - ITEM_TM01] = MOVE_NONE, // Todo
+    [ITEM_TM59 - ITEM_TM01] = MOVE_NONE, // Todo
+    [ITEM_TM60 - ITEM_TM01] = MOVE_NONE, // Todo
+    [ITEM_TM61 - ITEM_TM01] = MOVE_NONE, // Todo
+    [ITEM_TM62 - ITEM_TM01] = MOVE_NONE, // Todo
+    [ITEM_TM63 - ITEM_TM01] = MOVE_NONE, // Todo
+    [ITEM_TM64 - ITEM_TM01] = MOVE_NONE, // Todo
+    [ITEM_TM65 - ITEM_TM01] = MOVE_NONE, // Todo
+    [ITEM_TM66 - ITEM_TM01] = MOVE_NONE, // Todo
+    [ITEM_TM67 - ITEM_TM01] = MOVE_NONE, // Todo
+    [ITEM_TM68 - ITEM_TM01] = MOVE_NONE, // Todo
+    [ITEM_TM69 - ITEM_TM01] = MOVE_NONE, // Todo
+    [ITEM_TM70 - ITEM_TM01] = MOVE_NONE, // Todo
+    [ITEM_TM71 - ITEM_TM01] = MOVE_NONE, // Todo
+    [ITEM_TM72 - ITEM_TM01] = MOVE_NONE, // Todo
+    [ITEM_TM73 - ITEM_TM01] = MOVE_NONE, // Todo
+    [ITEM_TM74 - ITEM_TM01] = MOVE_NONE, // Todo
+    [ITEM_TM75 - ITEM_TM01] = MOVE_NONE, // Todo
+    [ITEM_TM76 - ITEM_TM01] = MOVE_NONE, // Todo
+    [ITEM_TM77 - ITEM_TM01] = MOVE_NONE, // Todo
+    [ITEM_TM78 - ITEM_TM01] = MOVE_NONE, // Todo
+    [ITEM_TM79 - ITEM_TM01] = MOVE_NONE, // Todo
+    [ITEM_TM80 - ITEM_TM01] = MOVE_NONE, // Todo
+    [ITEM_TM81 - ITEM_TM01] = MOVE_NONE, // Todo
+    [ITEM_TM82 - ITEM_TM01] = MOVE_NONE, // Todo
+    [ITEM_TM83 - ITEM_TM01] = MOVE_NONE, // Todo
+    [ITEM_TM84 - ITEM_TM01] = MOVE_NONE, // Todo
+    [ITEM_TM85 - ITEM_TM01] = MOVE_NONE, // Todo
+    [ITEM_TM86 - ITEM_TM01] = MOVE_NONE, // Todo
+    [ITEM_TM87 - ITEM_TM01] = MOVE_NONE, // Todo
+    [ITEM_TM88 - ITEM_TM01] = MOVE_NONE, // Todo
+    [ITEM_TM89 - ITEM_TM01] = MOVE_NONE, // Todo
+    [ITEM_TM90 - ITEM_TM01] = MOVE_NONE, // Todo
+    [ITEM_TM91 - ITEM_TM01] = MOVE_NONE, // Todo
+    [ITEM_TM92 - ITEM_TM01] = MOVE_NONE, // Todo
+    [ITEM_TM93 - ITEM_TM01] = MOVE_NONE, // Todo
+    [ITEM_TM94 - ITEM_TM01] = MOVE_NONE, // Todo
+    [ITEM_TM95 - ITEM_TM01] = MOVE_NONE, // Todo
+    [ITEM_TM96 - ITEM_TM01] = MOVE_NONE, // Todo
+    [ITEM_TM97 - ITEM_TM01] = MOVE_NONE, // Todo
+    [ITEM_TM98 - ITEM_TM01] = MOVE_NONE, // Todo
+    [ITEM_TM99 - ITEM_TM01] = MOVE_NONE, // Todo
+    [ITEM_TM100 - ITEM_TM01] = MOVE_NONE, // Todo
     [ITEM_HM01 - ITEM_TM01] = MOVE_CUT,
     [ITEM_HM02 - ITEM_TM01] = MOVE_FLY,
     [ITEM_HM03 - ITEM_TM01] = MOVE_SURF,
