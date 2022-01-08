@@ -2138,7 +2138,6 @@ static const u8 *const sHoldEffectNames[] =
     [HOLD_EFFECT_ADAMANT_ORB] = sText_HoldEffectAdamantOrb,
     [HOLD_EFFECT_LUSTROUS_ORB] = sText_HoldEffectLustrousOrb,
     [HOLD_EFFECT_GRISEOUS_ORB] = sText_HoldEffectGriseousOrb,
-    [HOLD_EFFECT_GRACIDEA] = sText_HoldEffectGracidea,
     [HOLD_EFFECT_RESIST_BERRY] = sText_HoldEffectResistBerry,
     [HOLD_EFFECT_POWER_ITEM] = sText_HoldEffectPowerItem,
     [HOLD_EFFECT_RESTORE_PCT_HP] = sText_HoldEffectRestorePctHp,
