@@ -333,7 +333,7 @@ static void CreateCursor(u8 taskId)
 {
     u32 spriteId;
 
-    LoadSpritePalette(&gSpritePalette_Arrow);
+    LoadSpritePalette(&sSpritePalette_Arrow);
 
     spriteId = CreateSpriteAtEnd(&sSpriteTemplate_Arrow, 53, 68, 0);
     gSprites[spriteId].callback = SpriteCB_Cursor_UpOrRight;
