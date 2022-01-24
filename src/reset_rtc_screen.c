@@ -348,7 +348,7 @@ static void CreateCursor(u8 taskId)
 
 static void FreeCursorPalette(void)
 {
-    FreeSpritePaletteByTag(gSpritePalette_Arrow.tag);
+    FreeSpritePaletteByTag(sSpritePalette_Arrow.tag);
 }
 
 static void HideChooseTimeWindow(u8 windowId)
