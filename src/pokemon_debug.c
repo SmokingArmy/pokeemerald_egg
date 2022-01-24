@@ -571,8 +571,8 @@ static void SetArrowInvisibility(struct PokemonDebugMenu *data)
 static void SetUpModifyArrows(struct PokemonDebugMenu *data)
 {
     LoadSpritePalette(&gSpritePalette_Arrow);
-    data->modifyArrows.arrowSpriteId[0] = CreateSprite(&gSpriteTemplate_Arrow, MODIFY_DIGITS_ARROW_X, MODIFY_DIGITS_ARROW1_Y, 0);
-    data->modifyArrows.arrowSpriteId[1] = CreateSprite(&gSpriteTemplate_Arrow, MODIFY_DIGITS_ARROW_X, MODIFY_DIGITS_ARROW2_Y, 0);
+    data->modifyArrows.arrowSpriteId[0] = CreateSprite(&sSpriteTemplate_Arrow, MODIFY_DIGITS_ARROW_X, MODIFY_DIGITS_ARROW1_Y, 0);
+    data->modifyArrows.arrowSpriteId[1] = CreateSprite(&sSpriteTemplate_Arrow, MODIFY_DIGITS_ARROW_X, MODIFY_DIGITS_ARROW2_Y, 0);
     gSprites[data->modifyArrows.arrowSpriteId[1]].animNum = 1;
 
     data->modifyArrows.minValue = 1;
@@ -589,7 +589,7 @@ static void SetUpModifyArrows(struct PokemonDebugMenu *data)
 static void SetUpOptionArrows(struct PokemonDebugMenu *data)
 {
     LoadSpritePalette(&gSpritePalette_Arrow);
-    data->optionArrows.arrowSpriteId[0] = CreateSprite(&gSpriteTemplate_Arrow, OPTIONS_ARROW_1_X, OPTIONS_ARROW_Y, 0);
+    data->optionArrows.arrowSpriteId[0] = CreateSprite(&sSpriteTemplate_Arrow, OPTIONS_ARROW_1_X, OPTIONS_ARROW_Y, 0);
     gSprites[data->optionArrows.arrowSpriteId[0]].animNum = 2;
 
     data->optionArrows.currentDigit = 0;
@@ -600,7 +600,7 @@ static void SetUpOptionArrows(struct PokemonDebugMenu *data)
 static void SetUpYPosModifyArrows(struct PokemonDebugMenu *data)
 {
     LoadSpritePalette(&gSpritePalette_Arrow);
-    data->yPosModifyArrows.arrowSpriteId[0] = CreateSprite(&gSpriteTemplate_Arrow, OPTIONS_ARROW_1_X, OPTIONS_ARROW_Y, 0);
+    data->yPosModifyArrows.arrowSpriteId[0] = CreateSprite(&sSpriteTemplate_Arrow, OPTIONS_ARROW_1_X, OPTIONS_ARROW_Y, 0);
     gSprites[data->yPosModifyArrows.arrowSpriteId[0]].animNum = 2;
 
     data->yPosModifyArrows.currentDigit = 0;
@@ -1720,18 +1720,18 @@ static void ReloadPokemonSprites(struct PokemonDebugMenu *data)
     
     //Modify Arrows
     LoadSpritePalette(&gSpritePalette_Arrow);
-    data->modifyArrows.arrowSpriteId[0] = CreateSprite(&gSpriteTemplate_Arrow, MODIFY_DIGITS_ARROW_X + (data->modifyArrows.currentDigit * 6), MODIFY_DIGITS_ARROW1_Y, 0);
-    data->modifyArrows.arrowSpriteId[1] = CreateSprite(&gSpriteTemplate_Arrow, MODIFY_DIGITS_ARROW_X + (data->modifyArrows.currentDigit * 6), MODIFY_DIGITS_ARROW2_Y, 0);
+    data->modifyArrows.arrowSpriteId[0] = CreateSprite(&sSpriteTemplate_Arrow, MODIFY_DIGITS_ARROW_X + (data->modifyArrows.currentDigit * 6), MODIFY_DIGITS_ARROW1_Y, 0);
+    data->modifyArrows.arrowSpriteId[1] = CreateSprite(&sSpriteTemplate_Arrow, MODIFY_DIGITS_ARROW_X + (data->modifyArrows.currentDigit * 6), MODIFY_DIGITS_ARROW2_Y, 0);
     gSprites[data->modifyArrows.arrowSpriteId[1]].animNum = 1;
 
     //Option Arrow
     LoadSpritePalette(&gSpritePalette_Arrow);
-    data->optionArrows.arrowSpriteId[0] = CreateSprite(&gSpriteTemplate_Arrow, OPTIONS_ARROW_1_X, OPTIONS_ARROW_Y + data->optionArrows.currentDigit * 12, 0);
+    data->optionArrows.arrowSpriteId[0] = CreateSprite(&sSpriteTemplate_Arrow, OPTIONS_ARROW_1_X, OPTIONS_ARROW_Y + data->optionArrows.currentDigit * 12, 0);
     gSprites[data->optionArrows.arrowSpriteId[0]].animNum = 2;
 
     //Y Pos Modify Arrow
     LoadSpritePalette(&gSpritePalette_Arrow);
-    data->yPosModifyArrows.arrowSpriteId[0] = CreateSprite(&gSpriteTemplate_Arrow, OPTIONS_ARROW_1_X, OPTIONS_ARROW_Y + data->yPosModifyArrows.currentDigit * 12, 0);
+    data->yPosModifyArrows.arrowSpriteId[0] = CreateSprite(&sSpriteTemplate_Arrow, OPTIONS_ARROW_1_X, OPTIONS_ARROW_Y + data->yPosModifyArrows.currentDigit * 12, 0);
     gSprites[data->yPosModifyArrows.arrowSpriteId[0]].animNum = 2;
 
     //Arrow invisibility
