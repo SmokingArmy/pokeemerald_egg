@@ -335,12 +335,12 @@ static void CreateCursor(u8 taskId)
 
     LoadSpritePalette(&gSpritePalette_Arrow);
 
-    spriteId = CreateSpriteAtEnd(&gSpriteTemplate_Arrow, 53, 68, 0);
+    spriteId = CreateSpriteAtEnd(&sSpriteTemplate_Arrow, 53, 68, 0);
     gSprites[spriteId].callback = SpriteCB_Cursor_UpOrRight;
     gSprites[spriteId].sTaskId = taskId;
     gSprites[spriteId].sState = -1;
 
-    spriteId = CreateSpriteAtEnd(&gSpriteTemplate_Arrow, 53, 68, 0);
+    spriteId = CreateSpriteAtEnd(&sSpriteTemplate_Arrow, 53, 68, 0);
     gSprites[spriteId].callback = SpriteCB_Cursor_Down;
     gSprites[spriteId].sTaskId = taskId;
     gSprites[spriteId].sState = -1;
