@@ -8624,7 +8624,7 @@ static void Task_HandleFormsScreenInput(u8 taskId)
         if (JOY_NEW(A_BUTTON))
         {
             sPokedexView->sFormScreenData.inSubmenu = TRUE;
-            sPokedexView->sFormScreenData.arrowSpriteId = CreateSprite(&gSpriteTemplate_Arrow, base_x + offset_x, base_y, 0);
+            sPokedexView->sFormScreenData.arrowSpriteId = CreateSprite(&sSpriteTemplate_Arrow, base_x + offset_x, base_y, 0);
             gSprites[sPokedexView->sFormScreenData.arrowSpriteId].animNum = 2;
             EvoFormsPage_PrintNavigationButtons();
         }
