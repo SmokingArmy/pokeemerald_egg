@@ -24,7 +24,7 @@
 #include "constants/songs.h"
 #include "constants/rgb.h"
 
-#define STARTER_MON_COUNT   3
+#define STARTER_MON_COUNT   6
 
 // Position of the sprite of the selected starter Pokemon
 #define STARTER_PKMN_POS_X (DISPLAY_WIDTH / 2)
@@ -103,16 +103,22 @@ static const struct WindowTemplate sWindowTemplate_StarterLabel =
 
 static const u8 sPokeballCoords[STARTER_MON_COUNT][2] =
 {
-    {60, 64},
-    {120, 88},
-    {180, 64},
+    {0x40, 0x2c},
+    {0x3c, 0x40},
+    {0x54, 0x52},
+    {0x9c, 0x52},
+    {0xb4, 0x40},
+    {0xb0, 0x2c},
 };
 
 static const u8 sStarterLabelCoords[STARTER_MON_COUNT][2] =
 {
-    {0, 9},
-    {16, 10},
-    {8, 4},
+    {0x08, 0x02},
+    {0x08, 0x02},
+    {0x08, 0x02},
+    {0x08, 0x02},
+    {0x08, 0x02},
+    {0x08, 0x02},
 };
 
 static const u16 sStarterMon[STARTER_MON_COUNT] =
@@ -120,6 +126,9 @@ static const u16 sStarterMon[STARTER_MON_COUNT] =
     SPECIES_TREECKO,
     SPECIES_TORCHIC,
     SPECIES_MUDKIP,
+    SPECIES_FROAKIE,
+    SPECIES_KUBFU,
+    SPECIES_BELDUM
 };
 
 static const struct BgTemplate sBgTemplates[3] =
@@ -208,9 +217,12 @@ static const struct OamData sOam_StarterCircle =
 
 static const u8 sCursorCoords[][2] =
 {
-    {60, 32},
-    {120, 56},
-    {180, 32},
+    {0x40, 0xf},
+    {0x3c, 0x20},
+    {0x54, 0x20},
+    {0x9c, 0x20},
+    {0xb4, 0x20},
+    {0xb0, 0xf},
 };
 
 static const union AnimCmd sAnim_Hand[] =
@@ -448,10 +460,10 @@ void CB2_ChooseStarter(void)
     gTasks[taskId].tStarterSelection = 1;
 
     // Create hand sprite
-    spriteId = CreateSprite(&sSpriteTemplate_Hand, 120, 56, 2);
+    spriteId = CreateSprite(&sSpriteTemplate_Hand, 120, 56, 0);
     gSprites[spriteId].data[0] = taskId;
 
-    // Create three Pokeball sprites
+    // Create six Pokeball sprites
     spriteId = CreateSprite(&sSpriteTemplate_Pokeball, sPokeballCoords[0][0], sPokeballCoords[0][1], 2);
     gSprites[spriteId].sTaskId = taskId;
     gSprites[spriteId].sBallId = 0;
@@ -463,6 +475,18 @@ void CB2_ChooseStarter(void)
     spriteId = CreateSprite(&sSpriteTemplate_Pokeball, sPokeballCoords[2][0], sPokeballCoords[2][1], 2);
     gSprites[spriteId].sTaskId = taskId;
     gSprites[spriteId].sBallId = 2;
+
+     spriteId = CreateSprite(&sSpriteTemplate_Pokeball, sPokeballCoords[3][0], sPokeballCoords[3][1], 2);
+    gSprites[spriteId].sTaskId = taskId;
+    gSprites[spriteId].sBallId = 3;
+
+    spriteId = CreateSprite(&sSpriteTemplate_Pokeball, sPokeballCoords[4][0], sPokeballCoords[4][1], 2);
+    gSprites[spriteId].sTaskId = taskId;
+    gSprites[spriteId].sBallId = 4;
+
+    spriteId = CreateSprite(&sSpriteTemplate_Pokeball, sPokeballCoords[5][0], sPokeballCoords[5][1], 2);
+    gSprites[spriteId].sTaskId = taskId;
+    gSprites[spriteId].sBallId = 5;
 
     sStarterLabelWindowId = WINDOW_NONE;
 }
