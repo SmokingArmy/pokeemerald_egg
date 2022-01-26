@@ -590,7 +590,7 @@ void Handle_Input_Debug_Pokemon(u8 taskId)
         data->frontspriteId = CreateSprite(&gMultiuseSpriteTemplate, DEBUG_MON_X + 32, DEBUG_MON_Y + 40, 0);
         gSprites[data->frontspriteId].callback = SpriteCallbackDummy;
         gSprites[data->frontspriteId].oam.priority = 0;
-
+        
         HandleLoadSpecialPokePic(&gMonBackPicTable[data->currentmonId], gMonSpritesGfxPtr->sprites.ptr[2], data->currentmonId, 0);
         palette = GetMonSpritePalStructFromOtIdPersonality(data->currentmonId, 0, data->isshiny);
         LoadCompressedSpritePalette(palette);
@@ -673,7 +673,7 @@ void Handle_Input_Debug_Pokemon(u8 taskId)
         {
             data->currentmonId--;
         }
-
+        
         PrintOnCurrentMonWindow(data->currentmonWindowId, data->currentmonId);
 
         DestroySprite(&gSprites[data->frontspriteId]);
@@ -883,7 +883,7 @@ void Handle_Input_Debug_Item(u8 taskId)
         {
             data->currentitemId--;
         }
-
+        
         PrintOnCurrentItemWindow(data->currentitemWindowId, data->currentitemId);
 
         DestroySprite(&gSprites[data->itemspriteId]);
