@@ -1107,139 +1107,139 @@ static void ResetPokemonDebugWindows(void)
     }
 }
 
-void CB2_Debug_Pokemon(void)
-{
-    u8 taskId;
-    const struct CompressedSpritePalette *palette;
-    struct PokemonDebugMenu *data;
-    u16 species;
-    s16 offset_y;
-    u8 front_x = sBattlerCoords[0][1].x;
-    u8 front_y;
+// //void CB2_Debug_Pokemon(void)
+// {
+//     u8 taskId;
+//     const struct CompressedSpritePalette *palette;
+//     struct PokemonDebugMenu *data;
+//     u16 species;
+//     s16 offset_y;
+//     u8 front_x = sBattlerCoords[0][1].x;
+//     u8 front_y;
 
-    switch (gMain.state)
-    {
-        case 0:
-        default:
-            SetVBlankCallback(NULL);
-            FreeMonSpritesGfx();
-            ResetBGs_Debug_Menu(0);
-            DmaFillLarge16(3, 0, (u8 *)VRAM, VRAM_SIZE, 0x1000)
-            DmaClear32(3, OAM, OAM_SIZE);
-            DmaClear16(3, PLTT, PLTT_SIZE);
-            gMain.state = 1;
-            break;
-        case 1:
-            ScanlineEffect_Stop();
-            ResetTasks();
-            ResetSpriteData();
-            ResetPaletteFade();
-            FreeAllSpritePalettes();
-            gReservedSpritePaletteCount = 8;
-            ResetAllPicSprites();
-            BlendPalettes(PALETTES_ALL, 16, RGB_BLACK);
-            LoadPalette(GetTextWindowPalette(0), 15*16, 0x40);
+//     switch (gMain.state)
+//     {
+//         case 0:
+//         default:
+//             SetVBlankCallback(NULL);
+//             FreeMonSpritesGfx();
+//             ResetBGs_Debug_Menu(0);
+//             DmaFillLarge16(3, 0, (u8 *)VRAM, VRAM_SIZE, 0x1000)
+//             DmaClear32(3, OAM, OAM_SIZE);
+//             DmaClear16(3, PLTT, PLTT_SIZE);
+//             gMain.state = 1;
+//             break;
+//         case 1:
+//             ScanlineEffect_Stop();
+//             ResetTasks();
+//             ResetSpriteData();
+//             ResetPaletteFade();
+//             FreeAllSpritePalettes();
+//             gReservedSpritePaletteCount = 8;
+//             ResetAllPicSprites();
+//             BlendPalettes(PALETTES_ALL, 16, RGB_BLACK);
+//             LoadPalette(GetTextWindowPalette(0), 15*16, 0x40);
 
-            FillBgTilemapBufferRect(0, 0, 0, 0, 32, 20, 15);
-            InitBgsFromTemplates(0, sBgTemplates, ARRAY_COUNT(sBgTemplates));
-            data->battleBgType = 0;
-            data->battleTerrain = 0;
-            LoadBattleBg(data->battleBgType , data->battleTerrain);
+//             FillBgTilemapBufferRect(0, 0, 0, 0, 32, 20, 15);
+//             InitBgsFromTemplates(0, sBgTemplates, ARRAY_COUNT(sBgTemplates));
+//             data->battleBgType = 0;
+//             data->battleTerrain = 0;
+//             LoadBattleBg(data->battleBgType , data->battleTerrain);
             
-            gMain.state++;
-            break;
-        case 2:
-            ResetPokemonDebugWindows();
-            gMain.state++;
-            break;
-        case 3:
-            AllocateMonSpritesGfx();
+//             gMain.state++;
+//             break;
+//         case 2:
+//             ResetPokemonDebugWindows();
+//             gMain.state++;
+//             break;
+//         case 3:
+//             AllocateMonSpritesGfx();
 
-            LoadPalette(sBgColor, 0, 2);
-            LoadMonIconPalette(SPECIES_BULBASAUR);
+//             LoadPalette(sBgColor, 0, 2);
+//             LoadMonIconPalette(SPECIES_BULBASAUR);
 
-            SetGpuReg(REG_OFFSET_DISPCNT, DISPCNT_OBJ_ON | DISPCNT_OBJ_1D_MAP);
-            ShowBg(0);
-            ShowBg(1);
-            ShowBg(2);
-            ShowBg(3);
+//             SetGpuReg(REG_OFFSET_DISPCNT, DISPCNT_OBJ_ON | DISPCNT_OBJ_1D_MAP);
+//             ShowBg(0);
+//             ShowBg(1);
+//             ShowBg(2);
+//             ShowBg(3);
 
-            //input task handler
-            taskId = CreateTask(Handle_Input_Debug_Pokemon, 0);
+//             //input task handler
+//             taskId = CreateTask(Handle_Input_Debug_Pokemon, 0);
 
-            data = AllocZeroed(sizeof(struct PokemonDebugMenu));
-            SetStructPtr(taskId, data);
+//             data = AllocZeroed(sizeof(struct PokemonDebugMenu));
+//             SetStructPtr(taskId, data);
 
-            data->currentmonId = SPECIES_BULBASAUR;
-            species = data->currentmonId;
+//             data->currentmonId = SPECIES_BULBASAUR;
+//             species = data->currentmonId;
 
-            //Print instructions
-            PrintInstructionsOnWindow(data);
+//             //Print instructions
+//             PrintInstructionsOnWindow(data);
 
-            //Palettes
-            palette = GetMonSpritePalStructCustom(species, data->isFemale, data->isShiny);
-            LoadCompressedSpritePalette(palette);
-            //Front
-            HandleLoadSpecialPokePicCustom(&gMonFrontPicTable[species], gMonSpritesGfxPtr->sprites.ptr[1], species, 0, data->isFemale);
-            data->isShiny = FALSE;
-            data->isFemale = FALSE;
-            BattleLoadOpponentMonSpriteGfxCustom(species, data->isFemale, data->isShiny, 1);
-            SetMultiuseSpriteTemplateToPokemon(species, 1);
-            gMultiuseSpriteTemplate.paletteTag = palette->tag;
-            front_y = GetBattlerSpriteFinal_YCustom(species, 0, 0);
-            data->frontspriteId = CreateSprite(&gMultiuseSpriteTemplate, front_x, front_y, 0);
-            gSprites[data->frontspriteId].oam.paletteNum = 1;
-            gSprites[data->frontspriteId].callback = SpriteCallbackDummy;
-            gSprites[data->frontspriteId].oam.priority = 0;
-            //Front Shadow
-            LoadAndCreateEnemyShadowSpriteCustom(data, species);
+//             //Palettes
+//             palette = GetMonSpritePalStructCustom(species, data->isFemale, data->isShiny);
+//             LoadCompressedSpritePalette(palette);
+//             //Front
+//             HandleLoadSpecialPokePicCustom(&gMonFrontPicTable[species], gMonSpritesGfxPtr->sprites.ptr[1], species, 0, data->isFemale);
+//             data->isShiny = FALSE;
+//             data->isFemale = FALSE;
+//             BattleLoadOpponentMonSpriteGfxCustom(species, data->isFemale, data->isShiny, 1);
+//             SetMultiuseSpriteTemplateToPokemon(species, 1);
+//             gMultiuseSpriteTemplate.paletteTag = palette->tag;
+//             front_y = GetBattlerSpriteFinal_YCustom(species, 0, 0);
+//             data->frontspriteId = CreateSprite(&gMultiuseSpriteTemplate, front_x, front_y, 0);
+//             gSprites[data->frontspriteId].oam.paletteNum = 1;
+//             gSprites[data->frontspriteId].callback = SpriteCallbackDummy;
+//             gSprites[data->frontspriteId].oam.priority = 0;
+//             //Front Shadow
+//             LoadAndCreateEnemyShadowSpriteCustom(data, species);
 
-            //Back
-            HandleLoadSpecialPokePicCustom(&gMonBackPicTable[species], gMonSpritesGfxPtr->sprites.ptr[2], species, 0, data->isFemale);
-            BattleLoadOpponentMonSpriteGfxCustom(species, data->isFemale, data->isShiny, 4);
-            SetMultiuseSpriteTemplateToPokemon(species, 2);
-            offset_y = gMonBackPicCoords[species].y_offset;
-            data->backspriteId = CreateSprite(&gMultiuseSpriteTemplate, DEBUG_MON_BACK_X, DEBUG_MON_BACK_Y + offset_y, 0);
-            gSprites[data->backspriteId].oam.paletteNum = 4;
-            gSprites[data->backspriteId].callback = SpriteCallbackDummy;
-            gSprites[data->backspriteId].oam.priority = 0;
+//             //Back
+//             HandleLoadSpecialPokePicCustom(&gMonBackPicTable[species], gMonSpritesGfxPtr->sprites.ptr[2], species, 0, data->isFemale);
+//             BattleLoadOpponentMonSpriteGfxCustom(species, data->isFemale, data->isShiny, 4);
+//             SetMultiuseSpriteTemplateToPokemon(species, 2);
+//             offset_y = gMonBackPicCoords[species].y_offset;
+//             data->backspriteId = CreateSprite(&gMultiuseSpriteTemplate, DEBUG_MON_BACK_X, DEBUG_MON_BACK_Y + offset_y, 0);
+//             gSprites[data->backspriteId].oam.paletteNum = 4;
+//             gSprites[data->backspriteId].callback = SpriteCallbackDummy;
+//             gSprites[data->backspriteId].oam.priority = 0;
 
-            //Icon Sprite
-            data->iconspriteId = CreateMonIconCustom(species, SpriteCB_MonIcon, DEBUG_ICON_X, DEBUG_ICON_Y, 4, data->isShiny, data->isFemale, data->isShiny);
-            gSprites[data->iconspriteId].oam.priority = 0;
+//             //Icon Sprite
+//             data->iconspriteId = CreateMonIconCustom(species, SpriteCB_MonIcon, DEBUG_ICON_X, DEBUG_ICON_Y, 4, data->isShiny, data->isFemale, data->isShiny);
+//             gSprites[data->iconspriteId].oam.priority = 0;
 
-            //Modify Arrows
-            SetUpModifyArrows(data);
-            PrintDigitChars(data);
+//             //Modify Arrows
+//             SetUpModifyArrows(data);
+//             PrintDigitChars(data);
 
-            //Option Arrow
-            SetUpOptionArrows(data);
+//             //Option Arrow
+//             SetUpOptionArrows(data);
 
-            //Modify Y Pos Arrow
-            SetUpYPosModifyArrows(data);
+//             //Modify Y Pos Arrow
+//             SetUpYPosModifyArrows(data);
 
-            //Anim names
-            data->animIdBack = GetSpeciesBackAnimSet(species) + 1;
-            data->animIdFront = sMonFrontAnimIdsTable[data->currentmonId - 1];
-            UpdateMonAnimNames(taskId);
+//             //Anim names
+//             data->animIdBack = GetSpeciesBackAnimSet(species) + 1;
+//             data->animIdFront = sMonFrontAnimIdsTable[data->currentmonId - 1];
+//             UpdateMonAnimNames(taskId);
 
-            //BattleNg Name
-            PrintBattleBgName(taskId);
+//             //BattleNg Name
+//             PrintBattleBgName(taskId);
 
-            //Footprint
-            DrawFootprintCustom(WIN_FOOTPRINT, species);
-            CopyWindowToVram(WIN_FOOTPRINT, COPYWIN_GFX);
+//             //Footprint
+//             DrawFootprintCustom(WIN_FOOTPRINT, species);
+//             CopyWindowToVram(WIN_FOOTPRINT, COPYWIN_GFX);
 
-            gMain.state++;
-            break;
-        case 4:
-            EnableInterrupts(1);
-            SetVBlankCallback(VBlankCB);
-            SetMainCallback2(CB2_Debug_Runner);
-            m4aMPlayVolumeControl(&gMPlayInfo_BGM, 0xFFFF, 0x80);
-            break;
-    }
-}
+//             gMain.state++;
+//             break;
+//         case 4:
+//             EnableInterrupts(1);
+//             SetVBlankCallback(VBlankCB);
+//             SetMainCallback2(CB2_Debug_Runner);
+//             m4aMPlayVolumeControl(&gMPlayInfo_BGM, 0xFFFF, 0x80);
+//             break;
+//     }
+// }
 
 static void CB2_Debug_Runner(void)
 {
