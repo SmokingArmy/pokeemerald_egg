@@ -1705,7 +1705,7 @@ static void SpawnObjectEventOnReturnToField(u8 objectEventId, s16 x, s16 y)
 
     if (spriteTemplate.paletteTag != 0xffff)
     {
-        LoadObjectEventPalette(spriteTemplate.paletteTag);teTag, graphicsInfo->paletteSlot);
+         LoadObjectEventPalette(spriteTemplate.paletteTag);
     }
     else if (paletteSlot >= 16)
     {
