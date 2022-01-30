@@ -3,6 +3,9 @@ ENTRY(Start)
 gNumMusicPlayers = 4;
 gMaxLines = 0;
 
+/* Modify the following load addresses as needed to make more room. Alternately, delete both the
+   declarations below and their references further down to get rid of the gaps.                  */
+
 SECTIONS {
     . = 0x2000000;
 
